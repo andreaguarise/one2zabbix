@@ -22,21 +22,21 @@ require 'mon_config'
 
 include OpenNebula
 
-DS_GROUP = "one-hosts " + ONE_CONTROLLER
-DS_TEMPLATE = "one-hosts-template"
-DS_APPLICATION = "one-hosts-app"
+HOST_GROUP = "one-hosts " + ONE_CONTROLLER
+HOST_TEMPLATE = "one-hosts-template"
+HOST_APPLICATION = "one-hosts-app"
 
 zbx = ZabbixApi.connect(:url => ZBX_ENDPOINT, :user =>  ZBX_USER, :password => ZBX_PASSWORD)
 
 # Ensure the host group we want exists.
-zbx.hostgroups.get_or_create(:name => "#{DS_GROUP}")
+zbx.hostgroups.get_or_create(:name => "#{HOST_GROUP}")
 
 # Now the template -- created templates are empty by default!
-zbx.templates.get_or_create(:host => "#{DS_TEMPLATE}", :groups => [:groupid => zbx.hostgroups.get_id(:name => "#{DS_GROUP}")])
+zbx.templates.get_or_create(:host => "#{HOST_TEMPLATE}", :groups => [:groupid => zbx.hostgroups.get_id(:name => "#{HOST_GROUP}")])
 
 zbx.applications.get_or_create(
-  :name => "#{DS_APPLICATION}",
-  :hostid => zbx.templates.get_id(:host => "#{DS_TEMPLATE}")
+  :name => "#{HOST_APPLICATION}",
+  :hostid => zbx.templates.get_id(:host => "#{HOST_TEMPLATE}")
 )
 
 client = Client.new(ONE_CREDENTIALS, ONE_ENDPOINT)
@@ -62,14 +62,8 @@ host_params = {
 	:name => "//NAME",
 }
 
-puts host_pool.to_xml.to_s
-exit 1
-
 metrics = [
-	{ :zbx_item_name => "ds_storage_total", :zbx_item_key => "ds.storage.total[aaa]", :path => "//TOTAL_MB", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default },
-	{ :zbx_item_name => "ds_storage_free", :zbx_item_key => "ds.storage.free[aaa]", :path => "//FREE_MB", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default },
-	{ :zbx_item_name => "ds_storage_used", :zbx_item_key => "ds.storage.used[aaa]", :path => "//USED_MB", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default },
-	{ :zbx_item_name => "ds_storage_images", :zbx_item_key => "ds.storage.images[aaa]", :path => "//IMAGES/ID", :zbx_type => "unsigned_int", :multiple=>true, :action=>:count },
+	{ :zbx_item_name => "host_mem_used", :zbx_item_key => "host.mem.used", :path => "//HOST_SHARE/USED_MEM", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default }
 ]
 
 metrics.each do |i|
@@ -80,17 +74,15 @@ metrics.each do |i|
   			:key_ => i[:zbx_item_key],
   			:type => 2, #zabbix trapper
 			:value_type => zbx_value_type_map[i[:zbx_type]],
-  			:hostid => zbx.templates.get_id(:host => "#{DS_TEMPLATE}"),
-  			:applications => [zbx.applications.get_id(:name => "#{DS_APPLICATION}")],
+  			:hostid => zbx.templates.get_id(:host => "#{HOST_TEMPLATE}"),
+#  			:applications => [zbx.applications.get_id(:name => "#{HOST_APPLICATION}")],
   			:trapper_hosts => "localhost,#{MON_HOST}"
 		)
 	end
 end
 
-puts ds_pool.to_xml.to_s
-exit 1
 ds_xml_doc = REXML::Document.new(ds_pool.to_xml.to_s)
-ds_xml = REXML::XPath.match(ds_xml_doc,'//DATASTORE')
+ds_xml = REXML::XPath.match(ds_xml_doc,'//HOST')
 ds_xml.each do |ds|
 	params_buff = {}	
 	ds_params.each_pair do |k,v|
@@ -116,10 +108,10 @@ ds_xml.each do |ds|
 		],
 		:templates => [ 
 		{
-			:templateid => zbx.templates.get_id(:host => "#{DS_TEMPLATE}")
+			:templateid => zbx.templates.get_id(:host => "#{HOST_TEMPLATE}")
 		}
 		],
-		:groups => [:groupid => zbx.hostgroups.get_id(:name => "#{DS_GROUP}")]
+		:groups => [:groupid => zbx.hostgroups.get_id(:name => "#{HOST_GROUP}")]
 	)
 
 	metrics.each do |s|
