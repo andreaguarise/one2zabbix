@@ -22,7 +22,7 @@ require 'mon_config'
 
 include OpenNebula
 
-GUEST_GROUP = "one-guests one-master.to.infn.it"
+GUEST_GROUP = "one-guests " + ONE_CONTROLLER
 GUEST_TEMPLATE = "one-guests-template"
 GUEST_APPLICATION = "one-guests-app"
 IAAS_GROUP = "one-IaaS"

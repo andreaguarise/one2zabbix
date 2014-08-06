@@ -1,0 +1,11 @@
+# OpenNebula credentials
+ONE_CREDENTIALS = "oneadmin:thePassoerdHere"
+# XML_RPC endpoint where OpenNebula is listening
+ONE_ENDPOINT    = "http://localhost:2633/RPC2"
+ZBX_HOST        = "192.135.19.27"
+ZBX_ENDPOINT    = "http://#{ZBX_HOST}/zabbix/api_jsonrpc.php"
+ZBX_USER        = "Admin"
+ZBX_PASSWORD    = ""
+
+MON_HOST        = ""
+MON_CONTROLLER  = "hostname of the controller"
