@@ -8,4 +8,4 @@ ZBX_USER        = "Admin"
 ZBX_PASSWORD    = ""
 
 MON_HOST        = ""
-MON_CONTROLLER  = "hostname of the controller"
+ONE_CONTROLLER  = "hostname of the controller"

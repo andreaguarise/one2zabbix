@@ -22,9 +22,9 @@ require 'mon_config'
 
 include OpenNebula
 
-DS_GROUP = "one-datastores " + ONE_CONTROLLER
-DS_TEMPLATE = "one-datastores-template"
-DS_APPLICATION = "one-datastores-app"
+DS_GROUP = "one-hosts " + ONE_CONTROLLER
+DS_TEMPLATE = "one-hosts-template"
+DS_APPLICATION = "one-hosts-app"
 
 zbx = ZabbixApi.connect(:url => ZBX_ENDPOINT, :user =>  ZBX_USER, :password => ZBX_PASSWORD)
 
@@ -41,9 +41,9 @@ zbx.applications.get_or_create(
 
 client = Client.new(ONE_CREDENTIALS, ONE_ENDPOINT)
 
-ds_pool = DatastorePool.new(client)
+host_pool = HostPool.new(client)
 
-rc = ds_pool.info
+rc = host_pool.info
 if OpenNebula.is_error?(rc)
      puts rc.message
      exit -1
@@ -57,10 +57,13 @@ zbx_value_type_map = {
 	"text" => 4 
 }
 
-ds_params = {
+host_params = {
 	:id => "//ID" ,
 	:name => "//NAME",
 }
+
+puts ds_pool.to_xml.to_s
+exit 1
 
 metrics = [
 	{ :zbx_item_name => "ds_storage_total", :zbx_item_key => "ds.storage.total[aaa]", :path => "//TOTAL_MB", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default },
@@ -85,6 +88,7 @@ metrics.each do |i|
 end
 
 puts ds_pool.to_xml.to_s
+exit 1
 ds_xml_doc = REXML::Document.new(ds_pool.to_xml.to_s)
 ds_xml = REXML::XPath.match(ds_xml_doc,'//DATASTORE')
 ds_xml.each do |ds|
