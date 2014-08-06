@@ -68,7 +68,10 @@ metrics = [
 	{ :zbx_item_name => "host_mem_free", :zbx_item_key => "host.mem.free", :path => "//HOST_SHARE/FREE_MEM", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default },
 	{ :zbx_item_name => "host_cpu_used", :zbx_item_key => "host.cpu.used", :path => "//HOST_SHARE/CPU_USAGE", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default },
 	{ :zbx_item_name => "host_cpu_total", :zbx_item_key => "host.cpu.total", :path => "//HOST_SHARE/MAX_CPU", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default },
-	{ :zbx_item_name => "host_cpu_free", :zbx_item_key => "host.cpu_free", :path => "//HOST_SHARE/FREE_CPU", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default },
+	{ :zbx_item_name => "host_cpu_free", :zbx_item_key => "host.cpu.free", :path => "//HOST_SHARE/FREE_CPU", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default },
+	{ :zbx_item_name => "host_storage_used", :zbx_item_key => "host.storage.used", :path => "//HOST_SHARE/USED_DISK", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default },
+  { :zbx_item_name => "host_storage_total", :zbx_item_key => "host.storage.total", :path => "//HOST_SHARE/MAX_DISK", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default },
+  { :zbx_item_name => "host_storage_free", :zbx_item_key => "host.storage.free", :path => "//HOST_SHARE/FREE_DISK", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default },
 	{ :zbx_item_name => "host_vm_running", :zbx_item_key => "host.vm.running", :path => "//HOST_SHARE/RUNNING_VMS", :zbx_type => "unsigned_int", :multiple=>false, :action=>:default }
 ]
 
