@@ -62,7 +62,7 @@ host_params = {
 	:name => "//NAME",
 }
 
-puts ds_pool.to_xml.to_s
+puts host_pool.to_xml.to_s
 exit 1
 
 metrics = [
