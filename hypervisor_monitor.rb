@@ -81,13 +81,13 @@ metrics.each do |i|
 	end
 end
 
-ds_xml_doc = REXML::Document.new(ds_pool.to_xml.to_s)
-ds_xml = REXML::XPath.match(ds_xml_doc,'//HOST')
-ds_xml.each do |ds|
+host_xml_doc = REXML::Document.new(host_pool.to_xml.to_s)
+host_xml = REXML::XPath.match(host_xml_doc,'//HOST')
+host_xml.each do |ds|
 	params_buff = {}	
-	ds_params.each_pair do |k,v|
-		ds_doc=REXML::Document.new(ds.to_s)
-		result = REXML::XPath.first(ds_doc,v)
+	host_params.each_pair do |k,v|
+		host_doc=REXML::Document.new(ds.to_s)
+		result = REXML::XPath.first(host_doc,v)
 		buffer =  result.text
 		puts "host_params key:#{k} ==> value:#{buffer}"
 		params_buff[k] = buffer
@@ -116,26 +116,26 @@ ds_xml.each do |ds|
 
 	metrics.each do |s|
 		buffer = ""
-		ds_doc=REXML::Document.new(ds.to_s)
+		host_doc=REXML::Document.new(ds.to_s)
 		if ( s[:multiple] )
 			if ( s[:action] == :default )
 			
 				puts s[:path]
-				result = REXML::XPath.match(ds_doc,s[:path])
+				result = REXML::XPath.match(host_doc,s[:path])
 				result.each do |r|
 					buffer =  buffer + " " + r.text
 				end
 			end
 			if ( s[:action] == :count )
 				count = 0
-				result = REXML::XPath.match(ds_doc,s[:path])
+				result = REXML::XPath.match(host_doc,s[:path])
 				result.each do |r|
 					count =  count + 1
 				end
 				buffer = count.to_s
 			end
 		else
-			result = REXML::XPath.first(ds_doc,s[:path])
+			result = REXML::XPath.first(host_doc,s[:path])
 			if ( result != nil ) 
 				buffer =  result.text
 			end
