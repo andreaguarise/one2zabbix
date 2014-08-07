@@ -84,7 +84,7 @@ metrics.each do |i|
   			:type => 2, #zabbix trapper
 			  :value_type => zbx_value_type_map[i[:zbx_type]],
   			:hostid => zbx.templates.get_id(:host => "#{HOST_TEMPLATE}"),
-  			:applications => [zbx.applications.get_id(:name => "#{HOST_APPLICATION}")],
+  			#:applications => [zbx.applications.get_id(:name => "#{HOST_APPLICATION}")],
   			:trapper_hosts => "localhost,#{MON_HOST}"
 		)
 	end
